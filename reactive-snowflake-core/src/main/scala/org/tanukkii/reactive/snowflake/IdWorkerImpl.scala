@@ -1,3 +1,10 @@
+/** Copyright 2016 Yusuke Yasuda
+  * Copyright 2010-2012 Twitter, Inc.
+  *
+  * You can find original works at
+  * https://github.com/twitter/snowflake/blob/snowflake-2010/src/main/scala/com/twitter/service/snowflake/IdWorker.scala
+  */
+
 package org.tanukkii.reactive.snowflake
 
 
