@@ -1,7 +1,7 @@
 import com.typesafe.sbt.SbtMultiJvm
 import com.typesafe.sbt.SbtMultiJvm.MultiJvmKeys.MultiJvm
 
-val akkaVersion = "2.4.2"
+val akkaVersion = "2.4.7"
 
 scalacOptions ++= Seq(
   "-deprecation",
