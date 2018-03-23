@@ -39,9 +39,21 @@ with IdWorkerImpl with ActorLogging {
 
   override def preRestart(reason: Throwable, message: Option[Any]): Unit = {
     message match {
-      case Some(msg: GenerateId) => self ! msg
+      case Some(msg: GenerateId) =>
+        self forward msg
+      case _ =>
     }
     super.preRestart(reason, message)
+  }
+
+  override def postRestart(reason: Throwable): Unit = {
+    reason match {
+      case InvalidSystemClock(_, timestamp, lastSequenceId) =>
+        lastTimestamp = timestamp
+        sequenceId = lastSequenceId
+      case _ =>
+    }
+    super.postRestart(reason)
   }
 }
 

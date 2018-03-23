@@ -8,7 +8,7 @@
 package org.tanukkii.reactive.snowflake
 
 
-@SerialVersionUID(1L) class InvalidSystemClock(message: String) extends Exception(message)
+@SerialVersionUID(1L) case class InvalidSystemClock(message: String, lastTimestamp: Long, lastSequenceId: Long) extends Exception(message)
 
 case class NextId(id: Option[Long], lastTimestamp: Long, nextSequence: Long)
 
@@ -33,8 +33,9 @@ private [snowflake] trait IdWorkerImpl {
   final def nextId(timestamp: Long, lastTimestamp: Long, currentSequence: Long): NextId = {
 
     if (timestamp < lastTimestamp) {
-      throw new InvalidSystemClock("Clock moved backwards.  Refusing to generate id for %d milliseconds".format(
-        lastTimestamp - timestamp))
+      throw InvalidSystemClock("Clock moved backwards.  Refusing to generate id for %d milliseconds".format(
+        lastTimestamp - timestamp
+      ), lastTimestamp, currentSequence)
     }
 
     require(currentSequence < sequenceMask + 1)
