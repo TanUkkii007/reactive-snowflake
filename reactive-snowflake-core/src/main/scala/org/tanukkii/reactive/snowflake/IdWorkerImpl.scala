@@ -24,6 +24,7 @@ private [snowflake] trait IdWorkerImpl {
   val maxWorkerId = -1L ^ (-1L << workerIdBits)
   val maxDatacenterId = -1L ^ (-1L << datacenterIdBits)
   val sequenceBits = 12L
+  val maxSequenceId = -1L ^ (-1L << sequenceBits)
 
   val workerIdShift = sequenceBits
   val datacenterIdShift = sequenceBits + workerIdBits
@@ -54,7 +55,7 @@ private [snowflake] trait IdWorkerImpl {
         s
     }
 
-    NextId(id, timestamp, sequence.getOrElse(0L))
+    NextId(id, timestamp, sequence.getOrElse(maxSequenceId))
   }
 
   def timeGen(): Long = System.currentTimeMillis()

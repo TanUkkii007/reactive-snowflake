@@ -24,13 +24,12 @@ class IdWorkerClockFluctuationTest extends TestKit(ActorSystem("IdWorkerClockFlu
     val dcId1 = DatacenterId(1L)
     val workerId1 = WorkerId(1L)
 
-    "generate increasing ids" in {
+    "generate only unique ids, even when time goes backwards" in {
       val n = 1000
 
       val idWorker = system.actorOf(FluctuatingIdWorker.props(dcId1, workerId1))
 
       (1 to n).foreach { _ =>
-        val requestId = java.util.UUID.randomUUID().toString
         idWorker ! GenerateId(testActor)
       }
 

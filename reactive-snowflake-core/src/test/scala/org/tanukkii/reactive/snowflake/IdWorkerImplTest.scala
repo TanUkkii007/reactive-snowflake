@@ -2,12 +2,27 @@ package org.tanukkii.reactive.snowflake
 
 import org.scalatest.{MustMatchers, WordSpecLike}
 
+/**
+  * Some of this tests are taken from Snowflake.
+  * https://github.com/twitter/snowflake/blob/snowflake-2010/src/test/scala/com/twitter/service/snowflake/IdWorkerSpec.scala
+  */
 class IdWorkerImplTest extends WordSpecLike with MustMatchers {
   "IdWorkerImpl" must {
 
     val workerMask     = 0x000000000001F000L
     val datacenterMask = 0x00000000003E0000L
     val timestampMask  = 0xFFFFFFFFFFC00000L
+
+    "generate an id" in {
+      val worker = new IdWorkerImpl {
+        override val datacenterId: Long = 1L
+        override val workerId: Long = 1L
+      }
+
+      val timestamp = System.currentTimeMillis()
+      val NextId(Some(id), _, _) = worker.nextId(timestamp, timestamp, 0L)
+      id must be > 0L
+    }
 
     "properly mask worker id" in {
       val wId = 0x1FL
